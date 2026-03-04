@@ -9,39 +9,39 @@ This repository contains the code used to analyze how LLM-generated advice diver
 ## Repository Structure
 
 ```
-repo-release/
-├── data/                       # Data files (Git LFS)
-│   ├── llm_advice.parquet      # LLM-generated advice responses
-│   ├── stratified_sample.parquet # Stratified sample of Reddit posts
-│   ├── advice_metrics.parquet  # Computed linguistic metrics
-│   ├── permission_metrics.parquet # Permission structure analysis
+recognition-without-prescription/
+├── data/                               # Data files (Git LFS)
+│   ├── llm_advice.parquet              # LLM-generated advice responses
+│   ├── stratified_sample.parquet       # Stratified sample of Reddit posts
+│   ├── advice_metrics.parquet          # Computed linguistic metrics
+│   ├── permission_metrics.parquet      # Permission structure analysis
 │   ├── multi_model_assignments.parquet # Topic classifications
-│   ├── pairwise_validation.csv # Validation sample pairs
-│   └── persona_comparison.csv  # Persona prompting results
+│   ├── pairwise_validation.csv         # Validation sample pairs
+│   └── persona_comparison.csv          # Persona prompting results
 │
 ├── scripts/
-│   ├── data/                    # Data preparation
-│   │   ├── clean_data.py        # Clean raw Reddit data
-│   │   ├── stratified_sample.py # Create stratified sample
-│   │   └── generate_llm_advice.py # Generate LLM advice responses
+│   ├── data/                           # Data preparation
+│   │   ├── clean_data.py               # Clean raw Reddit data
+│   │   ├── stratified_sample.py        # Create stratified sample
+│   │   └── generate_llm_advice.py      # Generate LLM advice responses
 │   │
-│   ├── topic_modeling/          # Topic classification
-│   │   └── multi_model_assignment.py # Multi-model topic assignment
+│   ├── topic_modeling/                 # Topic classification
+│   │   └── multi_model_assignment.py   # Multi-model topic assignment
 │   │
-│   └── analysis/                # Analysis scripts
-│       ├── compute_advice_metrics.py     # Core linguistic metrics
-│       ├── defamiliarization_analysis.py # Divergence analysis
-│       ├── permission_granting_analysis.py # Permission spectrum
-│       ├── persona_prompting_check.py    # Robustness check
-│       ├── prepare_validation_sample.py  # Validation sample
-│       └── categorization_advice_analysis.py # Categorization-advice link
+│   └── analysis/                               # Analysis scripts
+│       ├── compute_advice_metrics.py           # Core linguistic metrics
+│       ├── defamiliarization_analysis.py       # Divergence analysis
+│       ├── permission_granting_analysis.py     # Permission spectrum
+│       ├── persona_prompting_check.py          # Robustness check
+│       ├── prepare_validation_sample.py        # Validation sample
+│       └── categorization_advice_analysis.py   # Categorization-advice link
 │
-├── notebooks/                   # Figure generation
-│   ├── paper_figures.ipynb      # Main paper figures
-│   ├── fig_consensus_divergence.ipynb # Figure: consensus divergence
-│   ├── fig_therapy_simple.ipynb # Figure: therapy flattening
-│   ├── advice_metrics_analysis.ipynb # Metrics analysis
-│   └── multi_model_assignment_analysis.ipynb # Topic analysis
+├── notebooks/                                  # Figure generation
+│   ├── paper_figures.ipynb                     # Main paper figures
+│   ├── fig_consensus_divergence.ipynb          # Figure: consensus divergence
+│   ├── fig_therapy_simple.ipynb                # Figure: therapy flattening
+│   ├── advice_metrics_analysis.ipynb           # Metrics analysis
+│   └── multi_model_assignment_analysis.ipynb   # Topic analysis
 │
 ├── config/
 │   └── config.py                # OpenRouter model configuration
@@ -89,7 +89,7 @@ python scripts/analysis/persona_prompting_check.py
 
 ### 4. Figures
 
-Open the Jupyter notebooks in `notebooks/` to generate paper figures.
+Jupyter notebooks in `notebooks/` generate paper figures.
 
 ## Requirements
 
@@ -103,22 +103,6 @@ matplotlib
 seaborn
 openai  # For OpenRouter API calls
 ```
-
-Install spaCy model:
-```bash
-python -m spacy download en_core_web_sm
-```
-
-## Key Metrics
-
-The `compute_advice_metrics.py` script computes:
-
-- **leave_ratio**: Proportion of leave/exit language
-- **certainty_ratio**: Boosters vs hedges (epistemic stance)
-- **deontic_count**: Modal verbs expressing obligation (should, must)
-- **therapy_count**: Therapeutic vocabulary density
-- **hedge_count**: Epistemic hedging markers
-- **sentiment**: VADER sentiment scores
 
 ## Data
 
