@@ -10,6 +10,15 @@ This repository contains the code used to analyze how LLM-generated advice diver
 
 ```
 repo-release/
+├── data/                       # Data files (Git LFS)
+│   ├── llm_advice.parquet      # LLM-generated advice responses
+│   ├── stratified_sample.parquet # Stratified sample of Reddit posts
+│   ├── advice_metrics.parquet  # Computed linguistic metrics
+│   ├── permission_metrics.parquet # Permission structure analysis
+│   ├── multi_model_assignments.parquet # Topic classifications
+│   ├── pairwise_validation.csv # Validation sample pairs
+│   └── persona_comparison.csv  # Persona prompting results
+│
 ├── scripts/
 │   ├── data/                    # Data preparation
 │   │   ├── clean_data.py        # Clean raw Reddit data
@@ -113,7 +122,31 @@ The `compute_advice_metrics.py` script computes:
 
 ## Data
 
-Data files are not included in this repository. The analysis uses:
+Data files are stored using [Git LFS](https://git-lfs.github.com/) (Large File Storage). To clone with data:
+
+```bash
+# Install Git LFS (if not already installed)
+git lfs install
+
+# Clone repository (LFS files download automatically)
+git clone https://github.com/tomvannuenen/recognition-without-prescription.git
+```
+
+### Data Files
+
+| File | Description |
+|------|-------------|
+| `llm_advice.parquet` | LLM-generated advice responses from 4 models |
+| `stratified_sample.parquet` | Stratified sample of Reddit posts with human comments |
+| `advice_metrics.parquet` | Computed linguistic metrics (leave ratio, certainty, hedging, etc.) |
+| `permission_metrics.parquet` | Permission structure analysis results |
+| `multi_model_assignments.parquet` | Topic classifications from multi-model assignment |
+| `pairwise_validation.csv` | Sample pairs for human validation |
+| `persona_comparison.csv` | Persona prompting robustness check results |
+
+### Source Data
+
+The analysis uses:
 - Reddit posts from r/relationship_advice (Oct-Dec 2025)
 - Top-voted human comments per post
 - LLM-generated advice from 4 models (Gemini 2.5 Flash Lite, DeepSeek v3.2, Ministral 8B, GPT-4.1-nano)
