@@ -13,10 +13,15 @@ recognition-without-prescription/
 ├── data/                               # Data files (Git LFS)
 │   ├── llm_advice.parquet              # LLM-generated advice responses
 │   ├── stratified_sample.parquet       # Stratified sample of Reddit posts
+│   ├── r_relationship_advice_comments_cleaned.parquet  # Reddit comments
 │   ├── advice_metrics.parquet          # Computed linguistic metrics
 │   ├── permission_metrics.parquet      # Permission structure analysis
 │   ├── multi_model_assignments.parquet # Topic classifications
-│   ├── pairwise_validation.csv         # Validation sample pairs
+│   ├── defamiliarization/
+│   │   └── post_consensus.csv          # Per-post consensus metrics
+│   ├── pairwise_validation.csv         # Validation sample pairs (Coder 1)
+│   ├── validation_coder2.csv           # Validation sample pairs (Coder 2)
+│   ├── interrater_agreement_results.csv # Inter-rater agreement statistics
 │   └── persona_comparison.csv          # Persona prompting results
 │
 ├── scripts/
@@ -34,14 +39,18 @@ recognition-without-prescription/
 │       ├── permission_granting_analysis.py     # Permission spectrum
 │       ├── persona_prompting_check.py          # Robustness check
 │       ├── prepare_validation_sample.py        # Validation sample
+│       ├── calculate_interrater_agreement.py   # Inter-rater reliability
 │       └── categorization_advice_analysis.py   # Categorization-advice link
 │
 ├── notebooks/                                  # Figure generation
-│   ├── paper_figures.ipynb                     # Main paper figures
-│   ├── fig_consensus_divergence.ipynb          # Figure: consensus divergence
-│   ├── fig_therapy_simple.ipynb                # Figure: therapy flattening
-│   ├── advice_metrics_analysis.ipynb           # Metrics analysis
-│   └── multi_model_assignment_analysis.ipynb   # Topic analysis
+│   ├── fig_consensus_divergence.ipynb          # Figure: consensus vs divergence
+│   └── fig_therapy_simple.ipynb                # Figure: therapy flattening
+│
+├── LLM_Advice___Big_Data___Society/            # Paper LaTeX source
+│   ├── main.tex                                # Main document
+│   ├── abstract.tex, intro.tex, etc.           # Section files
+│   ├── custom.bib                              # References
+│   └── figures/                                # Paper figures
 │
 ├── config/
 │   └── config.py                # OpenRouter model configuration
@@ -85,6 +94,9 @@ python scripts/analysis/permission_granting_analysis.py
 
 # Robustness check: persona prompting
 python scripts/analysis/persona_prompting_check.py
+
+# Calculate inter-rater agreement for validation
+python scripts/analysis/calculate_interrater_agreement.py
 ```
 
 ### 4. Figures
@@ -94,14 +106,7 @@ Jupyter notebooks in `notebooks/` generate paper figures.
 ## Requirements
 
 ```
-pandas
-numpy
-spacy
-nltk
-scipy
-matplotlib
-seaborn
-openai  # For OpenRouter API calls
+pip install -r requirements.txt
 ```
 
 ## Data
@@ -113,7 +118,7 @@ Data files are stored using [Git LFS](https://git-lfs.github.com/) (Large File S
 git lfs install
 
 # Clone repository (LFS files download automatically)
-git clone https://github.com/tomvannuenen/recognition-without-prescription.git
+git clone https://github.com/[username]/recognition-without-prescription.git
 ```
 
 ### Data Files
@@ -122,10 +127,14 @@ git clone https://github.com/tomvannuenen/recognition-without-prescription.git
 |------|-------------|
 | `llm_advice.parquet` | LLM-generated advice responses from 4 models |
 | `stratified_sample.parquet` | Stratified sample of Reddit posts with human comments |
+| `r_relationship_advice_comments_cleaned.parquet` | Cleaned Reddit comments |
 | `advice_metrics.parquet` | Computed linguistic metrics (leave ratio, certainty, hedging, etc.) |
 | `permission_metrics.parquet` | Permission structure analysis results |
 | `multi_model_assignments.parquet` | Topic classifications from multi-model assignment |
-| `pairwise_validation.csv` | Sample pairs for human validation |
+| `defamiliarization/post_consensus.csv` | Per-post community consensus metrics |
+| `pairwise_validation.csv` | Validation sample pairs (Coder 1 annotations) |
+| `validation_coder2.csv` | Validation sample pairs (Coder 2 annotations) |
+| `interrater_agreement_results.csv` | Inter-rater agreement statistics |
 | `persona_comparison.csv` | Persona prompting robustness check results |
 
 ### Source Data
@@ -134,3 +143,20 @@ The analysis uses:
 - Reddit posts from r/relationship_advice (Oct-Dec 2025)
 - Top-voted human comments per post
 - LLM-generated advice from 4 models (Gemini 2.5 Flash Lite, DeepSeek v3.2, Ministral 8B, GPT-4.1-nano)
+
+## Validation
+
+Two independent coders evaluated 50 matched human-LLM response pairs. When both coders judged that a clear difference existed, directional agreement was:
+- Certainty: 96% (24/25 cases)
+- Leave-orientation: 100% (20/20 cases)
+- Therapeutic framing: 100% (44/44 cases)
+
+See `scripts/analysis/calculate_interrater_agreement.py` for details.
+
+## License
+
+[Add license information]
+
+## Citation
+
+[Add citation information when published]

@@ -1,0 +1,114 @@
+\appendix
+
+\section{Supplementary Materials}
+\label{sec:supplementary}
+
+\subsection{Advice Generation Prompt}
+\label{sec:prompt-advice}
+
+For advice generation, no prompt scaffolding is used. The model receives only the post body text, with no instructions, framing, or persona guidance. This design choice is methodologically motivated: what the model \textit{chooses to do} when presented with a relationship dilemma---advise, validate, question---is itself data about its defaults.
+
+\begin{quote}
+\small
+\ttfamily
+\{post\_body\_text\}
+\end{quote}
+
+\textbf{Parameters}: temperature=0.7, max\_tokens=4096
+
+Post titles are omitted to avoid activating genre-specific patterns from Reddit's characteristic title format.
+
+\subsection{Model Access and Traceability}
+\label{sec:model-access}
+
+All models were accessed via OpenRouter (\url{https://openrouter.ai}) between January 20--25, 2026. Table~\ref{tab:model_details} provides model identifiers and access details for reproducibility.
+
+\begin{table}[h]
+\centering
+\small
+\caption{Model access details. All models accessed via OpenRouter API.}
+\label{tab:model_details}
+\begin{tabular}{llll}
+\toprule
+\textbf{Model (paper)} & \textbf{API identifier} & \textbf{Provider} & \textbf{Access dates} \\
+\midrule
+Gemini 2.5 Flash Lite & google/gemini-2.5-flash-lite & Google & Jan 20--25, 2026 \\
+GPT-4.1-nano & openai/gpt-4.1-nano & OpenAI & Jan 20--25, 2026 \\
+DeepSeek v3.2 & deepseek/deepseek-chat-v3-0324 & DeepSeek & Jan 20--25, 2026 \\
+Ministral 8B & mistralai/ministral-8b & Mistral AI & Jan 20--25, 2026 \\
+\addlinespace
+\multicolumn{4}{l}{\textit{Topic discovery only:}} \\
+Gemini 2.0 Flash & google/gemini-2.0-flash-001 & Google & Jan 21, 2026 \\
+Claude Haiku 4.5 & anthropic/claude-3-5-haiku & Anthropic & Jan 21, 2026 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Model versions may change over time; the identifiers above reflect the versions available through OpenRouter during the access period. Access to model weights, training data, or alignment procedures was not available beyond what providers publicly document.
+
+\subsection{Topic Discovery and Assignment}
+
+Topic discovery used six models (Gemini 2.0 Flash, Claude Haiku 4.5, Gemini 2.5 Flash Lite, DeepSeek v3.2, Ministral 8B, GPT-4.1-nano) to independently categorize posts, following \citet{pham2024topicgpt}. Each model processed posts sequentially with the following prompt:
+
+\begin{quote}
+\small
+\ttfamily
+You will receive a post and a set of existing topic categories. Your task is to identify the core topic of this post.
+
+[Existing Topics]\\
+\{topics\}
+
+[Instructions]\\
+1. Read the post and identify its PRIMARY topic.\\
+2. Topic labels must be GENERALIZABLE (not specific to this post).\\
+3. If the post fits an existing topic, use that exact topic.\\
+4. If no existing topic fits well, propose ONE new topic.
+
+[Post]\\
+\{post\_text\}
+
+Respond with JSON: \{"action": "existing" or "new", "topic": "topic\_label"\}
+\end{quote}
+
+This design allows the taxonomy to emerge from model judgments rather than being imposed a priori. The 930 raw labels were consolidated into a 70-category taxonomy using Claude Sonnet 4. Topic assignment then used four models to assign 1--3 topics per post from the consolidated taxonomy. All discovery and assignment used temperature=0.0.
+
+\subsection{Lexicon Definitions}
+\label{sec:lexicons}
+
+The following lexicons operationalize the linguistic constructs in Section~\ref{sec:methods}. All matching is case-insensitive. Where established lists exist, they are adapted for the advice-giving domain; where no standard lists exist, domain-specific lexicons are developed and validated against human judgment (see below).
+
+\paragraph{Certainty Markers.}
+Adapted from Hyland's taxonomy of hedges and boosters in academic discourse \citep{hyland2005metadiscourse}, modified for informal advice-giving (e.g., including ``maybe,'' common in advice but rare in academic prose; excluding meta-discourse verbs like ``argue'' and ``claim'' that mark academic stance rather than interpersonal certainty).
+\textit{Hedges}: might, could, may, perhaps, possibly, maybe, probably, seemingly, apparently, potentially, somewhat, fairly, rather; \textit{phrases}: it seems, it appears, I think, I believe, not sure, hard to say.
+\textit{Boosters}: clearly, definitely, obviously, absolutely, certainly, always, never, completely, totally, entirely, utterly.
+\textit{Certainty ratio}: boosters / (hedges + boosters).
+
+\paragraph{Modal Verbs.}
+Following standard classifications of modal meaning \citep{palmer2001mood}.
+\textit{Deontic}: should, must, ought, need to, have to.
+\textit{Epistemic}: might, could, may, would, can.
+\textit{Modal ratio}: deontic / (deontic + epistemic).
+
+\paragraph{Relationship Orientation.}
+Domain-specific lexicons developed for this study based on preliminary analysis of r/relationship\_advice discourse patterns.
+\textit{Leave words}: leave, break up, divorce, end it, walk away, dump, move on, get out, run, separate.
+\textit{Stay words}: stay, work on, communicate, couples therapy, marriage counseling, work through, reconcile, forgive, compromise.
+\textit{Leave ratio}: leave / (leave + stay).
+
+\paragraph{Diagnostic Language.}
+Domain-specific lexicons capturing the therapeutic vocabulary characteristic of online relationship discourse.
+\textit{Red flags}: red flag, toxic, narcissist, gaslighting, manipulat*, abusive, controlling, grooming, love bomb, coercive.
+\textit{Therapy words}: boundar*, self-worth, therapy, therapist, self-care, mental health, healing, trauma, self-esteem, codependen*, well-being.
+
+\paragraph{Permission Language.}
+Based on the deontic authority framework of \citet{stevanovic2012deontic}, distinguishing formulations that authorize concrete action from those that assert abstract entitlement.
+\textit{Action-oriented}: you can leave, you don't have to, you're allowed to, you have every right to, it's okay to, you don't owe.
+\textit{Abstract entitlement}: you deserve, everyone deserves, you're worthy of, you merit.
+
+\subsection{Validation}
+
+The lexicon-derived metrics were validated using pairwise comparison, a design suited to the relative nature of the claims. Rather than asking whether absolute scores are accurate, the validation asked whether metrics correctly identify which response in a human--LLM pair exhibits more of a given property. Two independent coders evaluated 50 pairs drawn from leave-relevant topics (controlling behavior, infidelity, breakup considerations), judging for each pair whether the human or LLM response was more certain, more leave-oriented, and more therapeutic. Coders could mark pairs as ``equal'' (no clear difference) or ``skip'' (dimension not applicable to this pair).
+
+The key finding concerns directional agreement: when both coders judged that a clear difference existed, they overwhelmingly agreed on which response exhibited more of the property. For certainty, coders agreed on direction in 96\% of cases where both made a directional judgment (24/25). For leave-orientation, directional agreement was 100\% (20/20). For therapeutic framing, agreement was 100\% (44/44)---both coders consistently identified LLM responses as more therapeutic.
+
+Disagreements were concentrated at the threshold rather than the direction. One coder frequently marked ``equal'' or ``skip'' where the other saw a slight difference favoring human responses. This pattern indicates that coders applied different thresholds for what counts as a meaningful difference, not that they perceived opposite patterns. Only one case across all three dimensions involved true directional disagreement (one coder saying ``human'' while the other said ``LLM''). The near-absence of directional disagreement supports the validity of the lexicon-based measures for recovering the broad contrasts central to this analysis.

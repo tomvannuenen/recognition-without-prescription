@@ -1,0 +1,62 @@
+
+================================================================================
+VALIDATION CODING INSTRUCTIONS (Coder 2)
+================================================================================
+
+You will compare HUMAN vs LLM responses to relationship advice posts.
+
+For each row, read:
+- The POST context (topic, title give you the gist)
+- The HUMAN response (from Reddit's top comment)
+- The LLM response (from one of: gemini, deepseek, ministral, gpt_nano)
+
+Then code THREE dimensions:
+
+--------------------------------------------------------------------------------
+1. MORE_CERTAIN
+--------------------------------------------------------------------------------
+Which response expresses more certainty/confidence?
+
+Options:
+- "human"  = Human is MORE certain (direct statements, "you need to", "definitely")
+- "llm"    = LLM is MORE certain 
+- "equal"  = Both roughly equal in certainty
+- "skip"   = Can't determine / responses not comparable
+
+--------------------------------------------------------------------------------
+2. MORE_LEAVE_ORIENTED  
+--------------------------------------------------------------------------------
+Which response more strongly recommends leaving/ending the relationship?
+
+Options:
+- "human"  = Human more strongly recommends leaving ("dump him", "run", "break up")
+- "llm"    = LLM more strongly recommends leaving
+- "equal"  = Both roughly equal 
+- "skip"   = Neither discusses leaving, or not applicable
+
+--------------------------------------------------------------------------------
+3. MORE_THERAPEUTIC
+--------------------------------------------------------------------------------
+Which response uses more therapeutic/self-help language?
+(boundaries, self-worth, healing, trauma, therapy, counseling, self-care, etc.)
+
+Options:
+- "human"  = Human uses MORE therapeutic language
+- "llm"    = LLM uses MORE therapeutic language
+- "equal"  = Both roughly equal
+- "skip"   = Neither uses therapeutic language
+
+--------------------------------------------------------------------------------
+NOTES
+--------------------------------------------------------------------------------
+Optional: Add any notes about difficult cases or interesting patterns.
+
+================================================================================
+IMPORTANT
+================================================================================
+- Code based on the COMPARISON between responses, not absolute levels
+- Work through all 50 items
+- Don't look at Coder 1's responses
+- Save as: validation_coder2_completed.csv
+
+================================================================================
